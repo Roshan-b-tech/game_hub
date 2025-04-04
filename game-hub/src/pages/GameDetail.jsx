@@ -93,109 +93,120 @@ const GameDetail = () => {
   }
 
   return (
-    <Container className="py-4">
+    <Container className="game-detail-container">
+      <div className="game-detail-header">
+        <h1 className="game-detail-title">{game.name}</h1>
+        <Button
+          variant={isFavorite ? 'danger' : 'outline-danger'}
+          onClick={handleToggleFavorite}
+          className="d-flex align-items-center gap-2"
+        >
+          <i className={`bi bi-heart${isFavorite ? '-fill' : ''}`}></i>
+          {isFavorite ? 'Remove from Library' : 'Add to Library'}
+        </Button>
+      </div>
+      
       <Row>
-        <Col md={8}>
-          <div className="d-flex justify-content-between align-items-center mb-4">
-            <h1 className="mb-0">{game.name}</h1>
-            <Button
-              variant={isFavorite ? 'danger' : 'outline-danger'}
-              onClick={handleToggleFavorite}
-              className="d-flex align-items-center gap-2"
-            >
-              <i className={`bi bi-heart${isFavorite ? '-fill' : ''}`}></i>
-              {isFavorite ? 'Remove from Library' : 'Add to Library'}
-            </Button>
-          </div>
-          <div className="mb-4 position-relative">
+        <Col lg={8} md={7}>
+          <div className="game-detail-image-container">
             <img
               src={game.background_image}
               alt={game.name}
-              className="img-fluid rounded shadow"
-              style={{ width: '100%', maxHeight: '500px', objectFit: 'cover' }}
+              className="game-detail-image"
             />
-            <div className="position-absolute bottom-0 start-0 p-3 bg-dark bg-opacity-75 rounded-bottom">
-              <div className="d-flex gap-3">
-                <Badge bg="success" className="fs-6">
-                  ★ {game.rating}
-                </Badge>
-                <Badge bg="info" className="fs-6">
-                  Metacritic: {game.metacritic || 'N/A'}
-                </Badge>
-              </div>
+            <div className="game-detail-rating">
+              <Badge bg="success" className="fs-6">
+                ★ {game.rating}
+              </Badge>
+              <Badge bg="info" className="fs-6">
+                Metacritic: {game.metacritic || 'N/A'}
+              </Badge>
             </div>
           </div>
-          <div className="mb-4">
-            <h4 className="mb-3">About</h4>
+          
+          <div className="game-detail-section">
+            <h4 className="game-detail-section-title">About</h4>
             <div 
               className="game-description"
               dangerouslySetInnerHTML={{ __html: game.description }} 
             />
           </div>
+          
           {game.screenshots?.results && game.screenshots.results.length > 0 && (
-            <div className="mb-4">
-              <h4 className="mb-3">Screenshots</h4>
-              <Row>
+            <div className="game-detail-section">
+              <h4 className="game-detail-section-title">Screenshots</h4>
+              <div className="game-detail-screenshots">
                 {game.screenshots.results.map((screenshot) => (
-                  <Col key={screenshot.id} xs={6} md={4} className="mb-3">
+                  <div key={screenshot.id} className="game-detail-screenshot">
                     <img
                       src={screenshot.image}
                       alt={`${game.name} screenshot`}
-                      className="img-fluid rounded shadow-sm"
-                      style={{ cursor: 'pointer' }}
                     />
-                  </Col>
+                  </div>
                 ))}
-              </Row>
+              </div>
             </div>
           )}
         </Col>
-        <Col md={4}>
-          <Card className="mb-4 shadow-sm">
-            <Card.Body>
-              <h5 className="mb-3">Game Info</h5>
-              <div className="mb-3">
-                <strong>Release Date:</strong>
-                <div>{new Date(game.released).toLocaleDateString()}</div>
+        
+        <Col lg={4} md={5}>
+          <div className="game-detail-info-card">
+            <h5 className="game-detail-info-title">Game Info</h5>
+            
+            <div className="game-detail-info-item">
+              <div className="game-detail-info-label">Release Date</div>
+              <div className="game-detail-info-value">
+                {new Date(game.released).toLocaleDateString()}
               </div>
-              <div className="mb-3">
-                <strong>Genres:</strong>
-                <div className="d-flex flex-wrap gap-2 mt-1">
-                  {game.genres?.map((genre) => (
-                    <Badge key={genre.id} bg="secondary">
-                      {genre.name}
-                    </Badge>
-                  ))}
-                </div>
+            </div>
+            
+            <div className="game-detail-info-item">
+              <div className="game-detail-info-label">Genres</div>
+              <div className="game-detail-badges">
+                {game.genres?.map((genre) => (
+                  <Badge key={genre.id} bg="secondary">
+                    {genre.name}
+                  </Badge>
+                ))}
               </div>
-              <div className="mb-3">
-                <strong>Platforms:</strong>
-                <div className="d-flex flex-wrap gap-2 mt-1">
-                  {game.platforms?.map(({ platform }) => (
-                    <Badge key={platform.id} bg="info">
-                      {platform.name}
-                    </Badge>
-                  ))}
-                </div>
+            </div>
+            
+            <div className="game-detail-info-item">
+              <div className="game-detail-info-label">Platforms</div>
+              <div className="game-detail-badges">
+                {game.platforms?.map(({ platform }) => (
+                  <Badge key={platform.id} bg="info">
+                    {platform.name}
+                  </Badge>
+                ))}
               </div>
-              <div className="mb-3">
-                <strong>Developer:</strong>
-                <div>{game.developers?.map(dev => dev.name).join(', ') || 'N/A'}</div>
+            </div>
+            
+            <div className="game-detail-info-item">
+              <div className="game-detail-info-label">Developer</div>
+              <div className="game-detail-info-value">
+                {game.developers?.map(dev => dev.name).join(', ') || 'N/A'}
               </div>
-              <div className="mb-3">
-                <strong>Publisher:</strong>
-                <div>{game.publishers?.map(pub => pub.name).join(', ') || 'N/A'}</div>
+            </div>
+            
+            <div className="game-detail-info-item">
+              <div className="game-detail-info-label">Publisher</div>
+              <div className="game-detail-info-value">
+                {game.publishers?.map(pub => pub.name).join(', ') || 'N/A'}
               </div>
-              <div className="mb-3">
-                <strong>Website:</strong>
-                <div>
+            </div>
+            
+            {game.website && (
+              <div className="game-detail-info-item">
+                <div className="game-detail-info-label">Website</div>
+                <div className="game-detail-info-value">
                   <a href={game.website} target="_blank" rel="noopener noreferrer">
-                    {game.website || 'N/A'}
+                    {game.website}
                   </a>
                 </div>
               </div>
-            </Card.Body>
-          </Card>
+            )}
+          </div>
         </Col>
       </Row>
     </Container>
